@@ -1,0 +1,7 @@
+{
+  "name": "gps_tracking",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react-vite"
+}
