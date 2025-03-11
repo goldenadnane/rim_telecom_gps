@@ -55,6 +55,7 @@ const MapComponent = () => {
   const [startData, setStartData] = useState<Coordinate | null>(null);
   const [endData, setEndData] = useState<Coordinate | null>(null);
   const [currentData, setCurrentData] = useState<Coordinate | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const animationRef = useRef<number>();
   const startTimeRef = useRef<number>();
@@ -64,8 +65,12 @@ const MapComponent = () => {
 
   useEffect(() => {
     const fetchData = async () => {
+      setIsLoading(true);
       try {
         const response = await fetch("http://localhost:3000/api/coordinates");
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
         const data: Coordinate[] = await response.json();
 
         const validData = data.filter(
@@ -78,6 +83,9 @@ const MapComponent = () => {
         setCoordinates(validData);
       } catch (error) {
         console.error("Error fetching coordinates:", error);
+        alert("Failed to fetch data. Please check your network connection.");
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -92,11 +100,21 @@ const MapComponent = () => {
     }, 100);
   }, []);
 
-  const findDataByPosition = (lat: number, lng: number): Coordinate | null => {
-    return (
-      coordinates.find((coord) => coord.lat === lat && coord.lng === lng) ||
-      null
-    );
+  const findClosestData = (lat: number, lng: number): Coordinate | null => {
+    let closestData: Coordinate | null = null;
+    let minDistance = Infinity;
+
+    coordinates.forEach((coord) => {
+      const distance = Math.sqrt(
+        Math.pow(coord.lat - lat, 2) + Math.pow(coord.lng - lng, 2)
+      );
+      if (distance < minDistance) {
+        minDistance = distance;
+        closestData = coord;
+      }
+    });
+
+    return closestData;
   };
 
   const handleStart = () => {
@@ -105,17 +123,13 @@ const MapComponent = () => {
       return;
     }
 
-    const startData = findDataByPosition(startPoint[0], startPoint[1]);
-    const endData = findDataByPosition(endPoint[0], endPoint[1]);
+    const startData = findClosestData(startPoint[0], startPoint[1]);
+    const endData = findClosestData(endPoint[0], endPoint[1]);
 
-    if (!startData || !endData) {
-      alert("Les points de départ ou d'arrivée ne sont pas valides.");
-      return;
-    }
 
     setStartData(startData);
     setEndData(endData);
-    setCurrentData(startData);
+    setCurrentData(startData); // Initialiser les données du popup avec les données de départ
 
     const path = interpolatePoints(startPoint, endPoint);
     traveledPathRef.current = path;
@@ -175,8 +189,8 @@ const MapComponent = () => {
       setCurrentPosition([lat, lng]);
       setMovingMarkerPosition([lat, lng]);
 
-      const current = findDataByPosition(lat, lng);
-      setCurrentData(current || startData); // Conserver les données de départ si aucune donnée n'est trouvée
+      const closestData = findClosestData(lat, lng);
+      setCurrentData(closestData || startData); // Utiliser les données de départ si aucune donnée n'est trouvée
     }
 
     if (progress < 1) {
@@ -205,7 +219,7 @@ const MapComponent = () => {
     setTraveledPath([]);
     traveledPathRef.current = [];
     setCurrentPosition(startPoint || [35.62224, 10.73766]);
-    setCurrentData(startData);
+    setCurrentData(startData); // Réinitialiser les données du popup avec les données de départ
 
     if (polylineRef.current) {
       polylineRef.current.remove();
@@ -215,6 +229,7 @@ const MapComponent = () => {
 
   return (
     <div className="map-container">
+      {isLoading && <div className="loading-indicator">Loading...</div>}
       <MapContainer
         center={currentPosition}
         zoom={13}
@@ -223,7 +238,7 @@ const MapComponent = () => {
       >
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'  
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         />
 
         <Marker position={movingMarkerPosition}>

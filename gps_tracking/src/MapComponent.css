@@ -110,6 +110,10 @@
   background: #545b62;
 }
 
+.custom-popup {
+  max-width: 300px;
+}
+
 /* Personnalisation du popup Leaflet */
 .custom-popup .leaflet-popup-content-wrapper {
   padding: 8px;
@@ -120,7 +124,7 @@
 
 .custom-popup .leaflet-popup-content {
   margin: 0;
-  font-size: 10px;
+  font-size: 12px;
   line-height: 1.4;
 }
 
