@@ -1,0 +1,51 @@
+Documentation du Projet : Suivi GPS en Temps Réel
+Ce projet est une application web qui permet de visualiser le suivi GPS en temps réel sur une carte interactive. L'application utilise React, Leaflet et Capacitor pour afficher des données de positionnement, animer un marqueur sur une trajectoire, et afficher des informations détaillées dans un popup.
+
+
+
+Fonctionnalités : 
+
+Affichage de la carte :
+
+Utilisation de Leaflet pour afficher une carte interactive.
+
+Ajout d'un marqueur pour représenter la position actuelle.
+
+Suivi en temps réel :
+
+Animation d'un marqueur le long d'une trajectoire prédéfinie.
+
+Mise à jour dynamique des données dans un popup (vitesse, carburant, RPM, etc.).
+
+Gestion des points de départ et d'arrivée :
+
+L'utilisateur peut saisir les coordonnées de départ et d'arrivée.
+
+Validation des points de départ et d'arrivée par rapport aux données de l'API.
+
+Affichage des données :
+
+Les données de l'API sont affichées dans un popup.
+
+Les données de départ sont affichées par défaut, et les données d'arrivée sont affichées à la fin de l'animation.
+
+Réinitialisation :
+
+L'utilisateur peut réinitialiser l'animation et les données à tout moment.
+
+
+
+
+Technologies Utilisées
+
+React : Bibliothèque JavaScript pour la construction de l'interface utilisateur.
+
+Leaflet : Bibliothèque JavaScript pour les cartes interactives.
+
+Capacitor : Framework pour construire des applications web et mobiles.
+
+Ionic : Framework open-source pour développer des applications multi-plateformes (web, iOS, Android) en utilisant des technologies web (HTML, CSS, JavaScript).
+
+Express : Framework web pour Node.js, utilisé pour construire des applications web et des API (Application Programming Interface).
+
+API REST : Récupération des données de positionnement depuis une API.
