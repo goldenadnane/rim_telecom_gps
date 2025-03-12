@@ -126,7 +126,6 @@ const MapComponent = () => {
     const startData = findClosestData(startPoint[0], startPoint[1]);
     const endData = findClosestData(endPoint[0], endPoint[1]);
 
-
     setStartData(startData);
     setEndData(endData);
     setCurrentData(startData); // Initialiser les données du popup avec les données de départ
@@ -241,6 +240,57 @@ const MapComponent = () => {
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         />
 
+        {/* Afficher tous les points avec des marqueurs et des popups */}
+        {coordinates.map((coord, index) => (
+          <Marker key={index} position={[coord.lat, coord.lng]}>
+            <Popup className="custom-popup">
+              <div className="popup-content">
+                <div className="popup-left">
+                  <h3>Informations du point</h3>
+                  <p>Latitude: {coord.lat.toFixed(6)}</p>
+                  <p>Longitude: {coord.lng.toFixed(6)}</p>
+                </div>
+                <div className="popup-right">
+                  <p>
+                    <strong>Speed:</strong> {coord.speed}
+                  </p>
+                  <p>
+                    <strong>Fuel:</strong> {coord.fuel}
+                  </p>
+                  <p>
+                    <strong>Ignition:</strong> {coord.ignition ? "On" : "Off"}
+                  </p>
+                  <p>
+                    <strong>RPM:</strong> {coord.rpm}
+                  </p>
+                  <p>
+                    <strong>Odo:</strong> {coord.odo} km
+                  </p>
+                  <p>
+                    <strong>Heading:</strong> {coord.heading} °
+                  </p>
+                  <p>
+                    <strong>Satellites:</strong> {coord.SatInView}
+                  </p>
+                  <p>
+                    <strong>Signal:</strong> {coord.signal}
+                  </p>
+                  <p>
+                    <strong>Temp:</strong> {coord.temp}
+                  </p>
+                  <p>
+                    <strong>State:</strong> {coord.state}
+                  </p>
+                  <p>
+                    <strong>Timestamp:</strong> {coord.timestamp}
+                  </p>
+                </div>
+              </div>
+            </Popup>
+          </Marker>
+        ))}
+
+        {/* Marqueur en mouvement */}
         <Marker position={movingMarkerPosition}>
           <Popup className="custom-popup">
             <div className="popup-content">
@@ -285,6 +335,8 @@ const MapComponent = () => {
             </div>
           </Popup>
         </Marker>
+
+        {/* Contrôles pour définir les points de départ et d'arrivée */}
         <div className="controls">
           <div>
             <h4>Départ</h4>
