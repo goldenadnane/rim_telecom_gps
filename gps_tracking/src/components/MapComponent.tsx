@@ -128,7 +128,7 @@ const MapComponent = () => {
 
     setStartData(startData);
     setEndData(endData);
-    setCurrentData(startData); // Initialiser les données du popup avec les données de départ
+    setCurrentData(startData)
 
     const path = interpolatePoints(startPoint, endPoint);
     traveledPathRef.current = path;
@@ -189,7 +189,7 @@ const MapComponent = () => {
       setMovingMarkerPosition([lat, lng]);
 
       const closestData = findClosestData(lat, lng);
-      setCurrentData(closestData || startData); // Utiliser les données de départ si aucune donnée n'est trouvée
+      setCurrentData(closestData || startData);
     }
 
     if (progress < 1) {
@@ -240,7 +240,6 @@ const MapComponent = () => {
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         />
 
-        {/* Afficher tous les points avec des marqueurs et des popups */}
         {coordinates.map((coord, index) => (
           <Marker key={index} position={[coord.lat, coord.lng]}>
             <Popup className="custom-popup">
